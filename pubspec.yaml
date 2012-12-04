@@ -1,0 +1,5 @@
+name:  nigori
+description:  Secrets in the cloud
+
+dependencies:
+  unittest: { sdk: unittest }
