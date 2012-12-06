@@ -1,10 +1,7 @@
 library nigori;
 
 import 'dart:utf';
-import 'package:/unittest/unittest.dart';
 import 'dart:scalarlist';
-
-part 'test.dart';
 
 /**
  * Refer to the Constants section of the RFC for the meaning of these constants
