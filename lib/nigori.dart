@@ -34,6 +34,13 @@ class NigoriConstants {
   }
 }
 
+ByteArray toBytes(String string){
+  List<int> byteList = encodeUtf8(string);
+  ByteArray ba = new Uint8List(byteList.length).asByteArray();
+  int offset = 0;
+  byteList.forEach((byte) => offset = ba.setInt8(offset, byte));
+  return ba;
+}
 /**
  * Implement || from the nigori spec
  * TODO(drt24) unit test
