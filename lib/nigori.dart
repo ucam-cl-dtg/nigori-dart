@@ -43,9 +43,22 @@ ByteArray byteconcat(String first, String second) {
   List<int> secondBytes = encodeUtf8(second);
   ByteArray ba = new Uint8List(4+firstBytes.length + 4 + secondBytes.length).asByteArray();
 
-  int offset = ba.setInt32(0,firstBytes.length);
+  int offset = 0;
+  offset = _byteconcatLength(offset,firstBytes.length,ba);
   firstBytes.forEach((byte) => offset = ba.setInt8(offset,byte));
-  offset = ba.setInt32(offset,secondBytes.length);
+  offset = _byteconcatLength(offset,secondBytes.length,ba);
   secondBytes.forEach((byte) => offset = ba.setInt8(offset,byte));
   return ba;
+}
+/**
+ * Write an int of the length into the target array
+ */
+int _byteconcatLength(int offset, int bytelength, ByteArray target){
+  ByteArray length = new Uint32List(1).asByteArray();
+  length.setInt32(0, bytelength);
+  offset = target.setInt8(offset,length.getInt8(3));//Reverse byte order
+  offset = target.setInt8(offset,length.getInt8(2));
+  offset = target.setInt8(offset,length.getInt8(1));
+  offset = target.setInt8(offset,length.getInt8(0));
+  return offset;
 }
