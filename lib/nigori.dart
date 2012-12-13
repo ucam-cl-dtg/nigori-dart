@@ -19,19 +19,14 @@ class NigoriConstants {
   static final int Bkmac = 16;
   static final int Bkiv = 16;
   static final int Bkmaster = 16;
-  static final Usersalt = new Uint8List(9);
+  static final ByteArray Usersalt = toByteArray([117,115,101,114,32,115,97,108,116]);
+}
 
-  static void init() {
-  Usersalt[0] = 117;
-  Usersalt[1] = 115;
-  Usersalt[2] = 101;
-  Usersalt[3] = 114;
-  Usersalt[4] = 32;
-  Usersalt[5] = 115;
-  Usersalt[6] = 97;
-  Usersalt[7] = 108;
-  Usersalt[8] = 116;
-  }
+ByteArray toByteArray(List<int> ints){
+  Uint8List list = new Uint8List(ints.length);
+  int i = 0;
+  ints.forEach((byte) { list[i] = byte; ++i;});
+  return list.asByteArray();
 }
 
 ByteArray toBytes(String string){
