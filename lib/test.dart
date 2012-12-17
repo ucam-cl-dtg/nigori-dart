@@ -2,6 +2,7 @@ library test;
 
 import 'package:unittest/unittest.dart';
 import 'dart:scalarlist';
+import 'package:nigori/nigori.dart';
 
 class _ByteArrayMatcher extends BaseMatcher {
   final ByteArray _expected;
@@ -20,8 +21,10 @@ class _ByteArrayMatcher extends BaseMatcher {
   }
   Description describe (Description mismatchDescription){
     //TODO(drt24) description
-    return mismatchDescription;
+    return mismatchDescription.add(byteArrayToString(_expected));
   }
+  Description describeMismatch(ByteArray item, Description mismatchDescription, MatchState matchState, bool verbose) =>
+      mismatchDescription.add('was ').add(byteArrayToString(item));
 }
 
 Matcher byteArrayEquals(ByteArray array) => new _ByteArrayMatcher(array);
