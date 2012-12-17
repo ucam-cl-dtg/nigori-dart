@@ -1,3 +1,5 @@
+library test;
+
 import 'package:unittest/unittest.dart';
 import 'dart:scalarlist';
 
