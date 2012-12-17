@@ -11,4 +11,6 @@ void main() {
                                        /*second is 6 bytes*/0,0,0,6,
                                        /*second*/115, 101, 99, 111, 110, 100]);
   test('byteconcat value', () => expect(byteconcat("first", "second"),byteArrayEquals(firstSecond)));
+  test('byteArrayToString', () => expect(byteArrayToString(toByteArray([1, 2, 3, 4, 5])),equals("[1, 2, 3, 4, 5]")));
+  test('toFromBytes', () => expect(fromBytes(toBytes("string")),equals("string")));
 }

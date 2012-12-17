@@ -36,6 +36,26 @@ ByteArray toBytes(String string){
   byteList.forEach((byte) => offset = ba.setInt8(offset, byte));
   return ba;
 }
+
+String fromBytes(ByteArray array){
+  int length = array.lengthInBytes();
+  List<int> byteList = new List(length);
+  for (int i = 0; i < length; ++i){
+    byteList[i] = array.getInt8(i);
+  }
+  return decodeUtf8(byteList);
+}
+
+String byteArrayToString(ByteArray array){
+  int length = array.lengthInBytes();
+  String answer = "[";
+  for (int i = 0; i < length; ++i){
+    answer = "$answer${i>0 ? ', ':''}${array.getInt8(i)}";
+  }
+  answer = "$answer]";
+  return answer;
+}
+
 /**
  * Implement || from the nigori spec
  * TODO(drt24) unit test
