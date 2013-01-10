@@ -2,6 +2,7 @@ library nigori;
 
 import 'dart:utf';
 import 'dart:scalarlist';
+import 'dart:crypto';
 
 /**
  * Refer to the Constants section of the RFC for the meaning of these constants
@@ -38,12 +39,17 @@ ByteArray toBytes(String string){
 }
 
 String fromBytes(ByteArray array){
+  List<int> byteList = byteArrayToByteList(array);
+  return decodeUtf8(byteList);
+}
+
+List<int> byteArrayToByteList(ByteArray array){
   int length = array.lengthInBytes();
   List<int> byteList = new List(length);
   for (int i = 0; i < length; ++i){
     byteList[i] = array.getInt8(i);
   }
-  return decodeUtf8(byteList);
+  return byteList;
 }
 
 String byteArrayToString(ByteArray array){
@@ -54,6 +60,14 @@ String byteArrayToString(ByteArray array){
   }
   answer = "$answer]";
   return answer;
+}
+
+int byteArrayToInt(ByteArray array){
+  return int.parse("0x${CryptoUtils.bytesToHex(byteArrayToByteList(array))}");
+}
+
+int byteListToInt(List<int> byteList) {
+  return int.parse("0x${CryptoUtils.bytesToHex(byteList)}");
 }
 
 /**
