@@ -1,1 +1,1 @@
-{"packages":{"unittest":{"version":"0.2.7","source":"hosted","description":"unittest"}}}
+{"packages":{"bignum":{"version":"0.0.1","source":"git","description":{"url":"git://github.com/ucam-cl-dtg/dart-bignum.git","ref":null,"resolved-ref":"901ac9bef8eb712492e25046746132ccaf2f0cc9"}},"unittest":{"version":"0.2.10+1","source":"hosted","description":"unittest"}}}

@@ -3,3 +3,5 @@ description:  Secrets in the cloud
 
 dependencies:
   unittest:
+  bignum:
+    git: git://github.com/ucam-cl-dtg/dart-bignum.git
