@@ -20,7 +20,6 @@ class _ByteArrayMatcher extends BaseMatcher {
     return true;
   }
   Description describe (Description mismatchDescription){
-    //TODO(drt24) description
     return mismatchDescription.add(byteArrayToString(_expected));
   }
   Description describeMismatch(ByteArray item, Description mismatchDescription, MatchState matchState, bool verbose) =>
