@@ -45,7 +45,7 @@ String fromBytes(ByteArray array){
 
 List<int> byteArrayToByteList(ByteArray array){
   int length = array.lengthInBytes();
-  List<int> byteList = new List(length);
+  List<int> byteList = new List.fixedLength(length);
   for (int i = 0; i < length; ++i){
     byteList[i] = array.getInt8(i);
   }

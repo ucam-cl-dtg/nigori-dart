@@ -33,7 +33,7 @@ void dsa_test_vectors(Dsa dsa) {
   new DSATestVector(privateKey4,publicKey4,message0,new BigInteger( 0x52edf7c3b0f8a66e765724254a0bdbd5bb4651e2757db0121e284e2f6cf8a7ca ),new BigInteger( 0x17214f43286e3ca34186866064a0f84f59a845218d8a838eae11b9868edf0508 ))
                                ];
   int i = 0;
-  testVectors.forEach((vector) => 
+  testVectors.forEach((vector) =>
     test('dsa verifies ${i++}', () => dsa.verify(toBytes(vector.message),new DsaSignature(vector.r,vector.s),vector.publicKey))
   );
 }
@@ -54,7 +54,7 @@ void main() {
   DsaKeyPair keyPair = dsa.generateInsecureKeyPair();
   ByteArray message = toBytes("message");
   DsaSignature signature = dsa.sign(message, keyPair.privateKey);
-  
+
   test('dsa sign with key verifies', () => dsa.verify(message, signature, keyPair.publicKey));
   dsa_test_vectors(dsa);
 }
