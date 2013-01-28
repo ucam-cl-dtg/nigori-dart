@@ -72,8 +72,8 @@ class Dsa {
 
   static BigInteger _hash(ByteArray message){
     SHA256 hashFunction = new SHA256();
-    hashFunction.update(byteArrayToByteList(message));
-    List<int> hash = hashFunction.digest();
+    hashFunction.add(byteArrayToByteList(message));
+    List<int> hash = hashFunction.close();
     return new BigInteger(byteListToInt(hash));
   }
   /**
