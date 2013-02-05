@@ -19,7 +19,10 @@ class Dsa {
   BigInteger _q;
   BigInteger _p;
 
-  Dsa(DsaParameters parameters){
+  Dsa([DsaParameters parameters]){
+    if (parameters == null){
+      parameters = parameters3072;
+    }
     _parameters = parameters;
     _g = _parameters.g;
     _q = _parameters.q;
