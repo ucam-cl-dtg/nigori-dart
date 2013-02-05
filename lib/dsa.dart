@@ -91,6 +91,22 @@ class Dsa {
     BigInteger y = _g.modPow(x, _p);
     return new DsaKeyPair(x,y);
   }
+  /**
+   * Generate a DsaKeyPair from a cryptographically secure secret.
+   * The DSA private key may not have the same bits as the secret as DSA imposes certain constraints
+   * consequently you must use the privateKey from the DsaKeyPair rather than using the secret you provided.
+   */
+  DsaKeyPair fromSecret(BigInteger secret){
+    //It is not so simple as doing a bitLenght comparison as the first few bits may be 0.
+    // consequently all checks would be probablistic, however we can check that there are at least
+    // numBits - 64 and have a vanishingly small probability of incorrectly failing.
+    if (secret.bitLength() < _q.bitLength() - 64) {
+      throw new ArgumentError("Insufficiently many bits in secret: was ${secret.bitLength()} but expected at least ${_q.bitLength() -64}. There is a 1 in 2^64 probability of this being an incorrect failure.");
+    }
+    BigInteger x = secret.mod(_q-BigInteger.ONE) + BigInteger.ONE;
+    BigInteger y = _g.modPow(x,_p);
+    return new DsaKeyPair(x,y);
+  }
 }
 class InvalidSignatureException implements Exception {
   final String msg;

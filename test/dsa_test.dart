@@ -57,4 +57,7 @@ void main() {
 
   test('dsa sign with key verifies', () => dsa.verify(message, signature, keyPair.publicKey));
   dsa_test_vectors(dsa);
+  DsaKeyPair insec = dsa.generateInsecureKeyPair();
+  DsaKeyPair derived = dsa.fromSecret(insec.privateKey);
+  test('dsa key derivation from secret verifies', () => dsa.verify(message, dsa.sign(message, derived.privateKey), derived.publicKey));
 }
