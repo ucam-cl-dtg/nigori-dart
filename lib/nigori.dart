@@ -5,6 +5,7 @@ import 'dart:scalarlist';
 import 'dart:crypto';
 import 'dart:json';
 import 'package:json_object/json_object.dart';
+import 'package:bignum/bignum.dart';
 
 part 'bytes.dart';
 part 'messages.dart';

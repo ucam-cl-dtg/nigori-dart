@@ -40,6 +40,9 @@ String byteArrayToString(ByteArray array){
   answer = "$answer]";
   return answer;
 }
+ByteArray bigIntegerToByteArray(BigInteger integer){
+  return toByteArray(integer.toByteArray());
+}
 
 int byteArrayToInt(ByteArray array){
   return int.parse("0x${CryptoUtils.bytesToHex(byteArrayToByteList(array))}");
