@@ -54,11 +54,30 @@ int byteListToInt(List<int> byteList) {
 
 /**
  * Implement || from the nigori spec
+ * first and second can be Strings or List<int>s (of bytes) or BigIntegers
  * TODO(drt24) unit test
  * */
-ByteArray byteconcat(String first, String second) {
-  List<int> firstBytes = encodeUtf8(first);
-  List<int> secondBytes = encodeUtf8(second);
+ByteArray byteconcat(dynamic first, dynamic second) {
+  List<int> firstBytes;
+  if (first is String)
+   firstBytes = encodeUtf8(first);
+  else if (first is List<int>)
+    firstBytes = first;
+  else if (first is BigInteger)
+    firstBytes = first.toByteArray();
+  else
+    throw new ArgumentError("Invalid type of first");
+
+  List<int> secondBytes;
+  if (second is String)
+    secondBytes = encodeUtf8(second);
+  else if (second is List<int>)
+    secondBytes = second;
+  else if (second is BigInteger)
+    secondBytes = second.toByteArray();
+  else
+    throw new ArgumentError("Invalid type of second");
+
   ByteArray ba = new Uint8List(4+firstBytes.length + 4 + secondBytes.length).asByteArray();
 
   int offset = 0;
