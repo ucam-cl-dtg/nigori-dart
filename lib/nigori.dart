@@ -4,6 +4,7 @@ import 'dart:utf';
 import 'dart:scalarlist';
 import 'dart:crypto';
 import 'dart:json';
+import 'dart:math';
 import 'package:json_object/json_object.dart';
 import 'package:bignum/bignum.dart';
 
@@ -27,4 +28,16 @@ class NigoriConstants {
   static final int Bkiv = 16;
   static final int Bkmaster = 16;
   static final ByteArray Usersalt = toByteArray([117,115,101,114,32,115,97,108,116]);
+}
+
+class NigoriNonce {
+  static final _randomGen = new Random();
+  int _timestamp;
+  int _nonce;
+  int get timestamp => _timestamp;
+  int get random => _nonce;
+  NigoriNonce() {
+    _timestamp = new DateTime.now().millisecondsSinceEpoch;
+    _nonce = _randomGen.nextInt(((1<<32) - 1));
+  }
 }
