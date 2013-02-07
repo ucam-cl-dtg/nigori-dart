@@ -43,6 +43,9 @@ String byteArrayToString(ByteArray array){
 ByteArray bigIntegerToByteArray(BigInteger integer){
   return toByteArray(integer.toByteArray());
 }
+BigInteger byteArrayToBigInteger(ByteArray array){
+  return new BigInteger(byteArrayToInt(array));
+}
 
 int byteArrayToInt(ByteArray array){
   return int.parse("0x${CryptoUtils.bytesToHex(byteArrayToByteList(array))}");

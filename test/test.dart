@@ -2,6 +2,7 @@ import 'package:unittest/unittest.dart';
 import 'package:nigori/nigori.dart';
 import 'dart:scalarlist';
 import 'package:nigori/test.dart';
+import 'package:bignum/bignum.dart';
 import 'dart:utf';
 
 void main() {
@@ -17,4 +18,5 @@ void main() {
   test('byteArrayToString', () => expect(byteArrayToString(toByteArray([1, 2, 3, 4, 5])),equals("[1, 2, 3, 4, 5]")));
   test('toFromBytes', () => expect(fromBytes(toBytes("string")),equals("string")));
   test('intToByteArray', () => expect(intToByteArray(1),byteArrayEquals(toByteArray([0,0,0,1]))));
+  test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
 }
