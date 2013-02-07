@@ -33,11 +33,20 @@ class NigoriConstants {
 class NigoriNonce {
   static final _randomGen = new Random();
   int _timestamp;
-  int _nonce;
+  int _random;
+  /**
+   * time since epoch in seconds
+   */
   int get timestamp => _timestamp;
-  int get random => _nonce;
+  int get random => _random;
   NigoriNonce() {
-    _timestamp = new DateTime.now().millisecondsSinceEpoch;
-    _nonce = _randomGen.nextInt(((1<<32) - 1));
+    _timestamp = new DateTime.now().millisecondsSinceEpoch~/1000;
+    _random = _randomGen.nextInt(((1<<32) - 1));
+  }
+  ByteArray toByteArray() {
+    ByteArray ba = new Uint8List(8).asByteArray();
+    int offset = 0;
+    offset = _byteconcatInteger(offset,_random,ba);
+    offset = _byteconcatInteger(offset,_timestamp,ba);
   }
 }
