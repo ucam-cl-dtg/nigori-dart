@@ -93,7 +93,7 @@ ByteArray byteconcat(List<dynamic> items) {
 
   int offset = 0;
   byteArrays.forEach((array) {
-    offset = _byteconcatLength(offset,array.length,ba);
+    offset = _byteconcatInteger(offset,array.length,ba);
     array.forEach((byte) => offset = ba.setInt8(offset,byte));
     });
   return ba;
@@ -101,9 +101,9 @@ ByteArray byteconcat(List<dynamic> items) {
 /**
  * Write an int of the length into the target array
  */
-int _byteconcatLength(int offset, int bytelength, ByteArray target){
+int _byteconcatInteger(int offset, int integer, ByteArray target){
   ByteArray length = new Uint32List(1).asByteArray();
-  length.setInt32(0, bytelength);
+  length.setInt32(0, integer);
   offset = target.setInt8(offset,length.getInt8(3));//Reverse byte order
   offset = target.setInt8(offset,length.getInt8(2));
   offset = target.setInt8(offset,length.getInt8(1));
