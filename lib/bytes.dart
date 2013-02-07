@@ -52,39 +52,50 @@ int byteListToInt(List<int> byteList) {
   return int.parse("0x${CryptoUtils.bytesToHex(byteList)}");
 }
 
+ByteArray intToByteArray(int integer){
+  ByteArray toflip = new Uint32List(1).asByteArray();
+  ByteArray target = new Uint8List(4).asByteArray();
+  toflip.setInt32(0, integer);
+  int offset = 0;
+  offset = target.setInt8(offset,toflip.getInt8(3));//Reverse byte order
+  offset = target.setInt8(offset,toflip.getInt8(2));
+  offset = target.setInt8(offset,toflip.getInt8(1));
+  offset = target.setInt8(offset,toflip.getInt8(0));
+  return target;
+}
+
+List<int> _convertTypesToListInt(dynamic item){
+  List<int> itemBytes;
+  if (item is String)
+    itemBytes = encodeUtf8(item);
+  else if (item is List<int>)
+    itemBytes = item;
+  else if (item is BigInteger)
+    itemBytes = item.toByteArray();
+  else
+    throw new ArgumentError("Invalid type of item '${item}'");
+  return itemBytes;
+}
 /**
  * Implement || from the nigori spec
- * first and second can be Strings or List<int>s (of bytes) or BigIntegers
+ * items can be Strings or List<int>s (of bytes) or BigIntegers, types can be mixed
  * TODO(drt24) unit test
  * */
-ByteArray byteconcat(dynamic first, dynamic second) {
-  List<int> firstBytes;
-  if (first is String)
-   firstBytes = encodeUtf8(first);
-  else if (first is List<int>)
-    firstBytes = first;
-  else if (first is BigInteger)
-    firstBytes = first.toByteArray();
-  else
-    throw new ArgumentError("Invalid type of first");
+ByteArray byteconcat(List<dynamic> items) {
+  const intLength = 4;
+  List<List<int>> byteArrays = new List.fixedLength(items.length);
+  int index = 0;
+  items.forEach((item){ byteArrays[index] = _convertTypesToListInt(item); ++index;});
+  int length = 0;
+  byteArrays.forEach((array) => length += intLength + array.length); 
 
-  List<int> secondBytes;
-  if (second is String)
-    secondBytes = encodeUtf8(second);
-  else if (second is List<int>)
-    secondBytes = second;
-  else if (second is BigInteger)
-    secondBytes = second.toByteArray();
-  else
-    throw new ArgumentError("Invalid type of second");
-
-  ByteArray ba = new Uint8List(4+firstBytes.length + 4 + secondBytes.length).asByteArray();
+  ByteArray ba = new Uint8List(length).asByteArray();
 
   int offset = 0;
-  offset = _byteconcatLength(offset,firstBytes.length,ba);
-  firstBytes.forEach((byte) => offset = ba.setInt8(offset,byte));
-  offset = _byteconcatLength(offset,secondBytes.length,ba);
-  secondBytes.forEach((byte) => offset = ba.setInt8(offset,byte));
+  byteArrays.forEach((array) {
+    offset = _byteconcatLength(offset,array.length,ba);
+    array.forEach((byte) => offset = ba.setInt8(offset,byte));
+    });
   return ba;
 }
 /**
