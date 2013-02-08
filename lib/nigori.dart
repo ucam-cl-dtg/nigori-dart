@@ -48,5 +48,6 @@ class NigoriNonce {
     int offset = 0;
     offset = _byteconcatInteger(offset,_random,ba);
     offset = _byteconcatInteger(offset,_timestamp,ba);
+    return ba;
   }
 }
