@@ -115,3 +115,13 @@ int _byteconcatInteger(int offset, int integer, ByteArray target){
   offset = target.setInt8(offset,length.getInt8(0));
   return offset;
 }
+
+String base64Encode(ByteArray array){
+  return CryptoUtils.bytesToBase64(byteArrayToByteList(array));
+}
+List<String> base64EncodeList(List<ByteArray> listArray){
+  List<String> listString = new List.fixedLength(listArray.length);
+  int index = 0;
+  listArray.forEach((item) { listString[index] = base64Encode(item); ++index;});
+  return listString;
+}
