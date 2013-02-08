@@ -22,7 +22,7 @@ class NigoriConstants {
   static final int Niv = 1004;
   static final int Nmaster = 1005;
   static final int Bsuser = 16;
-  static final int Bkdsa = 16;
+  static final int Bkdsa = 32;
   static final int Bkenc = 16;
   static final int Bkmac = 16;
   static final int Bkiv = 16;
