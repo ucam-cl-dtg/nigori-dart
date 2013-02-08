@@ -4,6 +4,7 @@ import 'dart:scalarlist';
 import 'package:nigori/test.dart';
 import 'package:bignum/bignum.dart';
 import 'dart:utf';
+import 'package:json_object/json_object.dart';
 
 void main() {
   test('byteconcat runs', () => byteconcat(["first", "second"]));
@@ -19,4 +20,8 @@ void main() {
   test('toFromBytes', () => expect(fromBytes(toBytes("string")),equals("string")));
   test('intToByteArray', () => expect(intToByteArray(1),byteArrayEquals(toByteArray([0,0,0,1]))));
   test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
+  group('messages', () {
+    ByteArray ba = toByteArray([0,1,2,3,4,5]);
+    test('toJson',() => objectToJson(new AuthenticateRequest(ba,ba,ba,ba)).then((string) => string));
+  });
 }
