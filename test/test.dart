@@ -22,6 +22,6 @@ void main() {
   test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
   group('messages', () {
     ByteArray ba = toByteArray([0,1,2,3,4,5]);
-    test('toJson',() => objectToJson(new AuthenticateRequest(ba,ba,ba,ba)).then((string) => string));
+    test('toJson',() => objectToJson(new AuthenticateRequest(ba,ba,ba,"dfsdf")).then((string) => string));
   });
 }

@@ -8,11 +8,11 @@ class AuthenticateRequest {
   String sig;
   String nonce;
   String server_name;
-  AuthenticateRequest(ByteArray public_key,ByteArray sig,ByteArray nonce,ByteArray server_name){
+  AuthenticateRequest(ByteArray public_key,ByteArray sig,ByteArray nonce, String server_name){
     this.public_key = base64Encode(public_key);
     this.sig = base64Encode(sig);
     this.nonce = base64Encode(nonce);
-    this.server_name = base64Encode(server_name);
+    this.server_name = server_name;
   }
 }
 class RegisterRequest {
