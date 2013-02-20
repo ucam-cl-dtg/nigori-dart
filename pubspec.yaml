@@ -1,10 +1,9 @@
-name:  nigori
-description:  Secrets in the cloud
-
+name: nigori
+description: Secrets in the cloud
 dependencies:
-  unittest:
-  json_object:
-  bignum:
-    git: git://github.com/ucam-cl-dtg/dart-bignum.git
+  unittest: any
+  json_object: 1.0.7
   protobuf:
     git: git://github.com/ucam-cl-dtg/dart-protobuf.git
+  bignum:
+    git: git://github.com/ucam-cl-dtg/dart-bignum.git
