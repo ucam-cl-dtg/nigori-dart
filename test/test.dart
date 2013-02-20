@@ -20,14 +20,31 @@ void main() {
   test('toFromBytes', () => expect(fromBytes(toBytes("string")),equals("string")));
   test('intToByteArray', () => expect(intToByteArray(1),byteArrayEquals(toByteArray([0,0,0,1]))));
   test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
-  group('messages toJson', () {
+  group('messages', () {
     ByteArray ba = toByteArray([0,1,2,3,4,5]);
-    AuthenticateRequest auth = new AuthenticateRequest(ba,ba,ba,"localhost:433");
-    test('AuthenticateRequest',() => objectToJson(auth).then((string) => string));
-    test('RegisterRequest',() => objectToJson(new RegisterRequest(ba,ba)).then(expectAsync1((string) => string)));
-    test('UnregisterRequest',() => objectToJson(new UnregisterRequest(auth)).then(expectAsync1((string) => string)));
-    test('GetRequest',() => objectToJson(new GetRequest(auth,ba,ba)).then(expectAsync1((string) => string)));
     RevisionValue rv = new RevisionValue(ba,ba);
-    test('GetResponse',() => objectToJson(new GetResponse([rv],ba)).then(expectAsync1((string) => string)));
+    group('toJson', () {
+      AuthenticateRequest auth = new AuthenticateRequest(ba,ba,ba,"localhost:433");
+      test('AuthenticateRequest',() => objectToJson(auth).then((string) => string));
+      test('RegisterRequest',() => objectToJson(new RegisterRequest(ba,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('UnregisterRequest',() => objectToJson(new UnregisterRequest(auth))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('GetRequest',() => objectToJson(new GetRequest(auth,ba,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('GetResponse',() => objectToJson(new GetResponse([rv],ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+    });
+    group('fromJson', () {
+      GetResponse getResponse = new GetResponse([rv],ba);
+      test('GetResponse', () => objectToJson(getResponse)
+          .then(expectAsync1((string) {
+            GetResponse parsedResponse = new GetResponse.fromJsonString(string);
+            expect(parsedResponse.revisions.length,equals(1));
+            expect(parsedResponse.revisions.single,equals(rv));
+            expect(parsedResponse.key,equals(base64Encode(ba)));
+          }))
+          .catchError((error)=> registerException(error)));
+    });
   });
 }

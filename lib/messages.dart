@@ -45,11 +45,18 @@ class GetRequest {
     this.revision = base64Encode(revision);
   }
 }
-class GetResponse {
-  final List<RevisionValue> revisions;
+class GetResponse extends JsonObject {
+  List<RevisionValue> revisions;
   String key;
   GetResponse(this.revisions,ByteArray key){
     this.key = base64Encode(key);
+    this['key'] = key;
+    this['revisions'] = revisions;
+    this.isExtendable = false;
+  }
+  GetResponse._empty();
+  factory GetResponse.fromJsonString(String json){
+    return new JsonObject.fromJsonString(json,new GetResponse._empty());
   }
 }
 
@@ -57,7 +64,7 @@ class GetIndicesRequest {
   final AuthenticateRequest auth;
   GetIndicesRequest(this.auth);
 }
-class GetIndicesResponse {
+class GetIndicesResponse extends JsonObject {
   List<String> indices;
   GetIndicesResponse(List<ByteArray> indices){
     this.indices = base64EncodeList(indices);
@@ -71,12 +78,16 @@ class GetRevisionsRequest {
     this.key = base64Encode(key);
   }
 }
-class GetRevisionsResponse {
+class GetRevisionsResponse extends JsonObject {
   List<String> revisions;
   String key;
   GetRevisionsResponse(List<ByteArray> revisions, ByteArray key) {
     this.revisions = base64EncodeList(revisions);
     this.key = base64Encode(key);
+  }
+  GetRevisionsResponse._empty();
+  factory GetRevisionsResponse.fromJsonString(String json){
+    return new JsonObject.fromJsonString(json,new GetRevisionsResponse._empty());
   }
 }
 
