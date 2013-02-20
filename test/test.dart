@@ -20,8 +20,14 @@ void main() {
   test('toFromBytes', () => expect(fromBytes(toBytes("string")),equals("string")));
   test('intToByteArray', () => expect(intToByteArray(1),byteArrayEquals(toByteArray([0,0,0,1]))));
   test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
-  group('messages', () {
+  group('messages toJson', () {
     ByteArray ba = toByteArray([0,1,2,3,4,5]);
-    test('toJson',() => objectToJson(new AuthenticateRequest(ba,ba,ba,"dfsdf")).then((string) => string));
+    AuthenticateRequest auth = new AuthenticateRequest(ba,ba,ba,"localhost:433");
+    test('AuthenticateRequest',() => objectToJson(auth).then((string) => string));
+    test('RegisterRequest',() => objectToJson(new RegisterRequest(ba,ba)).then(expectAsync1((string) => string)));
+    test('UnregisterRequest',() => objectToJson(new UnregisterRequest(auth)).then(expectAsync1((string) => string)));
+    test('GetRequest',() => objectToJson(new GetRequest(auth,ba,ba)).then(expectAsync1((string) => string)));
+    RevisionValue rv = new RevisionValue(ba,ba);
+    test('GetResponse',() => objectToJson(new GetResponse([rv],ba)).then(expectAsync1((string) => string)));
   });
 }
