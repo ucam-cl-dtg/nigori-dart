@@ -125,3 +125,53 @@ List<String> base64EncodeList(List<ByteArray> listArray){
   listArray.forEach((item) { listString[index] = base64Encode(item); ++index;});
   return listString;
 }
+
+ByteArray base64Decode(String encoded){
+  return toByteArray(_base64ToBytes(encoded));
+}
+
+// Copied out of a dart CL https://codereview.chromium.org/12321078/ which I have submitted
+int _getBase64Val(String s, int pos) {
+  int code = s.codeUnitAt(pos);
+  if (code >= 65 && code < (65+26)) { // 'A'..'Z'
+    return code - 65;
+  } else if (code >= 97 && code < (97+26)) { // 'a'..'z'
+    return code - 97 + 26;
+  } else if (code >= 48 && code < (48+10)) { // '0'..'9'
+    return code - 48 + 52;
+  } else if (code == 43) { // '+'
+    return 62;
+  } else if (code == 47) { // '/'
+    return 63;
+  } else {
+    throw 'Invalid character "$s" at $pos';
+  }
+}
+
+List<int> _base64ToBytes(String s) {
+  // Remove line breaks so that we can treat all base64 strings the same
+  s = s.replaceAll('\r\n', '');
+  var rtn = new List<int>();
+  var pos = 0;
+  while (pos < s.length) {
+    if (s[pos+2] =='=') { // Single byte as two chars.
+      int v = (_getBase64Val(s, pos) << 18 ) | (_getBase64Val(s, pos+1) << 12 );
+      rtn.add((v >> 16) & 0xff);
+      break;
+    } else if (s[pos+3] == '=') { // Two bytes as 3 chars.
+      int v = (_getBase64Val(s, pos) << 18 ) | (_getBase64Val(s, pos+1) << 12 ) |
+          (_getBase64Val(s, pos + 2) << 6);
+      rtn.add((v >> 16) & 0xff);
+      rtn.add((v >> 8) & 0xff);
+      break;
+    } else { // Three bytes as 4 chars.
+      int v = (_getBase64Val(s, pos) << 18 ) | (_getBase64Val(s, pos+1) << 12 ) |
+          (_getBase64Val(s, pos + 2) << 6) | _getBase64Val(s, pos+3);
+      pos += 4;
+      rtn.add((v >> 16 ) & 0xff);
+      rtn.add((v >> 8) & 0xff);
+      rtn.add(v & 0xff);
+    }
+  }
+  return rtn;
+}
