@@ -40,9 +40,9 @@ void main() {
       test('GetResponse', () => objectToJson(getResponse)
           .then(expectAsync1((string) {
             GetResponse parsedResponse = new GetResponse.fromJsonString(string);
+            expect(parsedResponse.key,equals(base64Encode(ba)));
             expect(parsedResponse.revisions.length,equals(1));
             expect(parsedResponse.revisions.single,equals(rv));
-            expect(parsedResponse.key,equals(base64Encode(ba)));
           }))
           .catchError((error)=> registerException(error)));
     });

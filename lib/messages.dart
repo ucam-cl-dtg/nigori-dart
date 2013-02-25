@@ -34,6 +34,15 @@ class RevisionValue {
     this.revision = base64Encode(revision);
     this.value = base64Encode(value);
   }
+  bool operator ==(RevisionValue rv){
+    if (rv is! RevisionValue){
+      return false;
+    }
+    if (rv == null){
+      return false;
+    }
+    return this.revision == rv.revision && this.value == rv.value;
+  }
 }
 
 class GetRequest {
@@ -46,18 +55,25 @@ class GetRequest {
   }
 }
 class GetResponse extends JsonObject {
-  List<RevisionValue> revisions;
-  String key;
-  GetResponse(this.revisions,ByteArray key){
+  GetResponse(List<RevisionValue> revisions, ByteArray key){
     this.key = base64Encode(key);
-    this['key'] = key;
+    this['key'] = this.key;
     this['revisions'] = revisions;
     this.isExtendable = false;
   }
   GetResponse._empty();
   factory GetResponse.fromJsonString(String json){
-    return new JsonObject.fromJsonString(json,new GetResponse._empty());
+    GetResponse response = new JsonObject.fromJsonString(json,new GetResponse._empty());
+    List<RevisionValue> revisions = new List.fixedLength(response.revisions.length);
+    for (int i = 0; i< revisions.length; ++i){
+      Map map = response.revisions[i];
+      revisions[i] = new RevisionValue(base64Decode(map['revision']),base64Decode(map['value']));
+    }
+    response.revisions = revisions;
+    response.key = response.key;
+    return response;
   }
+  String toString() => "";
 }
 
 class GetIndicesRequest {
