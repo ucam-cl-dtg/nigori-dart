@@ -22,6 +22,7 @@ void main() {
   test('byteArrayToBigInteger', () => expect(byteArrayToBigInteger(toByteArray([1])),equals(new BigInteger(1))));
   group('messages', () {
     ByteArray ba = toByteArray([0,1,2,3,4,5]);
+    String baEncoded = base64Encode(ba);
     RevisionValue rv = new RevisionValue(ba,ba);
     group('toJson', () {
       AuthenticateRequest auth = new AuthenticateRequest(ba,ba,ba,"localhost:433");
@@ -43,6 +44,23 @@ void main() {
             expect(parsedResponse.key,equals(base64Encode(ba)));
             expect(parsedResponse.revisions.length,equals(1));
             expect(parsedResponse.revisions.single,equals(rv));
+          }))
+          .catchError((error)=> registerException(error)));
+      GetIndicesResponse getIndicesResponse = new GetIndicesResponse([ba]);
+      test('GetIndicesResponse', () => objectToJson(getIndicesResponse)
+          .then(expectAsync1((string) {
+            GetIndicesResponse parsedResponse = new GetIndicesResponse.fromJsonString(string);
+            expect(parsedResponse.indices.length,equals(1));
+            expect(parsedResponse.indices.single,equals(baEncoded));
+          }))
+          .catchError((error)=> registerException(error)));
+      GetRevisionsResponse getRevisionsResponse = new GetRevisionsResponse([ba],ba);
+      test('GetRevisionsResponse', () => objectToJson(getRevisionsResponse)
+          .then(expectAsync1((string) {
+            GetRevisionsResponse parsedResponse = new GetRevisionsResponse.fromJsonString(string);
+            expect(parsedResponse.key,equals(baEncoded));
+            expect(parsedResponse.revisions.length,equals(1));
+            expect(parsedResponse.revisions.single,equals(baEncoded));
           }))
           .catchError((error)=> registerException(error)));
     });

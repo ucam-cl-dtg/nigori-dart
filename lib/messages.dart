@@ -84,6 +84,13 @@ class GetIndicesResponse extends JsonObject {
   List<String> indices;
   GetIndicesResponse(List<ByteArray> indices){
     this.indices = base64EncodeList(indices);
+    this['indices'] = this.indices;
+  }
+  GetIndicesResponse._empty();
+  factory GetIndicesResponse.fromJsonString(String json){
+    GetIndicesResponse response = new JsonObject.fromJsonString(json, new GetIndicesResponse._empty());
+    response.indices = response['indices'];
+    return response;
   }
 }
 
@@ -100,10 +107,15 @@ class GetRevisionsResponse extends JsonObject {
   GetRevisionsResponse(List<ByteArray> revisions, ByteArray key) {
     this.revisions = base64EncodeList(revisions);
     this.key = base64Encode(key);
+    this['revisions'] = this.revisions;
+    this['key'] = this.key;
   }
   GetRevisionsResponse._empty();
   factory GetRevisionsResponse.fromJsonString(String json){
-    return new JsonObject.fromJsonString(json,new GetRevisionsResponse._empty());
+    GetRevisionsResponse response = new JsonObject.fromJsonString(json,new GetRevisionsResponse._empty());
+    response.revisions = response['revisions'];
+    response.key = response['key'];
+    return response;
   }
 }
 
