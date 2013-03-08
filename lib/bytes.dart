@@ -77,6 +77,8 @@ List<int> _convertTypesToListInt(dynamic item){
     itemBytes = item.toByteArray();
   else if (item is int)
     itemBytes = byteArrayToByteList(intToByteArray(item));
+  else if (item is ByteArray)
+    itemBytes = byteArrayToByteList(item);
   else
     throw new ArgumentError("Invalid type of item '${item}'");
   return itemBytes;
