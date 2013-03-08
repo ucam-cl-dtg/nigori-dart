@@ -103,6 +103,11 @@ ByteArray byteconcat(List<dynamic> items) {
     });
   return ba;
 }
+
+List<int> byteconcatList(List<dynamic> items){
+  return byteArrayToByteList(byteconcat(items));
+}
+
 /**
  * Write an int of the length into the target array
  */
