@@ -135,14 +135,16 @@ class PutRequest {
     this.value = base64Encode(value);
   }
 }
-class DeleteRequest {
+class DeleteRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
-  String revision;
+  //String revision;
   DeleteRequest(this.auth,ByteArray key,[ByteArray revision]){
     this.key = base64Encode(key);
+    this['auth'] = this.auth;
+    this['key'] = this.key;
     if (revision != null){
-      this.revision = base64Encode(revision);
+      this['revision'] = base64Encode(revision);
     }
   }
 }
