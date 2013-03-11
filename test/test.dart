@@ -35,6 +35,16 @@ void main() {
           .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
       test('GetResponse',() => objectToJson(new GetResponse([rv],ba))
           .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('GetIndicesRequest',() => objectToJson(new GetIndicesRequest(auth))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('GetRevisionsRequest',() => objectToJson(new GetRevisionsRequest(auth,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('PutRequest',() => objectToJson(new PutRequest(auth,ba,ba,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('DeleteRequest no revision',() => objectToJson(new DeleteRequest(auth,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+      test('DeleteRequest revision',() => objectToJson(new DeleteRequest(auth,ba,ba))
+          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
     });
     group('fromJson', () {
       GetResponse getResponse = new GetResponse([rv],ba);
