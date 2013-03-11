@@ -139,8 +139,10 @@ class DeleteRequest {
   final AuthenticateRequest auth;
   String key;
   String revision;
-  DeleteRequest(this.auth,ByteArray key,ByteArray revision){
+  DeleteRequest(this.auth,ByteArray key,[ByteArray revision]){
     this.key = base64Encode(key);
-    this.revision = base64Encode(revision);
+    if (revision != null){
+      this.revision = base64Encode(revision);
+    }
   }
 }
