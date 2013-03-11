@@ -55,8 +55,11 @@ class GetRequest {
   }
 }
 class GetResponse extends JsonObject {
+  String key;
+  List<RevisionValue> revisions;
   GetResponse(List<RevisionValue> revisions, ByteArray key){
     this.key = base64Encode(key);
+    this.revisions = revisions;
     this['key'] = this.key;
     this['revisions'] = revisions;
     this.isExtendable = false;
@@ -64,13 +67,15 @@ class GetResponse extends JsonObject {
   GetResponse._empty();
   factory GetResponse.fromJsonString(String json){
     GetResponse response = new JsonObject.fromJsonString(json,new GetResponse._empty());
-    List<RevisionValue> revisions = new List.fixedLength(response.revisions.length);
+    List<RevisionValue> revisions = new List.fixedLength(response['revisions'].length);
     for (int i = 0; i< revisions.length; ++i){
-      Map map = response.revisions[i];
-      revisions[i] = new RevisionValue(base64Decode(map['revision']),base64Decode(map['value']));
+      Map map = response['revisions'][i];
+      String revision = map['revision'];
+      String value = map['value'];
+      revisions[i] = new RevisionValue(base64Decode(revision),base64Decode(value));
     }
     response.revisions = revisions;
-    response.key = response.key;
+    response.key = response['key'];
     return response;
   }
   String toString() => "";
