@@ -134,6 +134,9 @@ List<String> base64EncodeList(List<ByteArray> listArray){
 }
 
 ByteArray base64Decode(String encoded){
+  if (null == encoded){
+    throw new ArgumentError("Null string cannot be decoded");
+  }
   return toByteArray(_base64ToBytes(encoded));
 }
 
