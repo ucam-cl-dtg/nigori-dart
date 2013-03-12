@@ -2,7 +2,8 @@ name: nigori
 description: Secrets in the cloud
 dependencies:
   unittest: any
-  json_object: 1.0.7
+  json_object:
+    git: git://github.com/ucam-cl-dtg/dartwatch-JsonObject.git
   protobuf:
     git: git://github.com/ucam-cl-dtg/dart-protobuf.git
   bignum:

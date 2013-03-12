@@ -3,16 +3,20 @@ part of nigori;
 
 //TODO(drt24) deal with optional parameters using null
 
-class AuthenticateRequest {
+class AuthenticateRequest extends JsonObject {
   String public_key;
   String sig;
   String nonce;
   String server_name;
   AuthenticateRequest(ByteArray public_key,ByteArray sig,ByteArray nonce, String server_name){
     this.public_key = base64Encode(public_key);
+    this['public_key'] = this.public_key;
     this.sig = base64Encode(sig);
+    this['sig'] = this.sig;
     this.nonce = base64Encode(nonce);
+    this['nonce'] = this.nonce;
     this.server_name = server_name;
+    this['server_name'] = this.server_name;
   }
 }
 class RegisterRequest {
@@ -23,9 +27,11 @@ class RegisterRequest {
     this.token = base64Encode(token);
   }
 }
-class UnregisterRequest {
+class UnregisterRequest extends JsonObject {
   final AuthenticateRequest auth;
-  UnregisterRequest(this.auth);
+  UnregisterRequest(this.auth) {
+    this['auth'] = this.auth;
+  }
 }
 class RevisionValue {
   String revision;
@@ -45,13 +51,16 @@ class RevisionValue {
   }
 }
 
-class GetRequest {
+class GetRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
   String revision;
   GetRequest(this.auth,ByteArray key,ByteArray revision){
+    this['auth'] = this.auth;
     this.key = base64Encode(key);
+    this['key'] = this.key;
     this.revision = base64Encode(revision);
+    this['revision'] = this.revision;
   }
 }
 class GetResponse extends JsonObject {
@@ -81,9 +90,11 @@ class GetResponse extends JsonObject {
   String toString() => "";
 }
 
-class GetIndicesRequest {
+class GetIndicesRequest extends JsonObject {
   final AuthenticateRequest auth;
-  GetIndicesRequest(this.auth);
+  GetIndicesRequest(this.auth){
+    this['auth'] = this.auth;
+  }
 }
 class GetIndicesResponse extends JsonObject {
   List<String> indices;
@@ -99,11 +110,13 @@ class GetIndicesResponse extends JsonObject {
   }
 }
 
-class GetRevisionsRequest {
+class GetRevisionsRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
   GetRevisionsRequest(this.auth, ByteArray key){
+    this['auth'] = this.auth;
     this.key = base64Encode(key);
+    this['key'] = this.key;
   }
 }
 class GetRevisionsResponse extends JsonObject {
@@ -124,15 +137,19 @@ class GetRevisionsResponse extends JsonObject {
   }
 }
 
-class PutRequest {
+class PutRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
   String revision;
   String value;
   PutRequest(this.auth,ByteArray key,ByteArray revision,ByteArray value){
+    this['auth'] = this.auth;
     this.key = base64Encode(key);
+    this['key'] = this.key;
     this.revision = base64Encode(revision);
+    this['revision'] = this.revision;
     this.value = base64Encode(value);
+    this['value'] = this.value;
   }
 }
 class DeleteRequest extends JsonObject {

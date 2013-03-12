@@ -1,5 +1,6 @@
 library nigori;
 
+import 'dart:async';
 import 'dart:utf';
 import 'dart:scalarlist';
 import 'dart:crypto';
