@@ -6,6 +6,13 @@ import 'package:bignum/bignum.dart';
 import 'dart:utf';
 import 'package:json_object/json_object.dart';
 
+bool enableJsonDebugLog = false;
+void _log(Object object){
+  if (enableJsonDebugLog){
+    print(object);
+  }
+}
+
 void main() {
   test('byteconcat runs', () => byteconcat(["first", "second"]));
   test('byteconcat type', () => expect(byteconcat(["first", "second"]),new isInstanceOf<ByteArray>()));
@@ -26,25 +33,25 @@ void main() {
     RevisionValue rv = new RevisionValue(ba,ba);
     group('toJson', () {
       AuthenticateRequest auth = new AuthenticateRequest(ba,ba,ba,"localhost:433");
-      test('AuthenticateRequest',() => objectToJson(auth).then((string) => string));
+      test('AuthenticateRequest',() => objectToJson(auth).then((string) => _log(string)));
       test('RegisterRequest',() => objectToJson(new RegisterRequest(ba,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('UnregisterRequest',() => objectToJson(new UnregisterRequest(auth))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('GetRequest',() => objectToJson(new GetRequest(auth,ba,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('GetResponse',() => objectToJson(new GetResponse([rv],ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('GetIndicesRequest',() => objectToJson(new GetIndicesRequest(auth))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('GetRevisionsRequest',() => objectToJson(new GetRevisionsRequest(auth,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('PutRequest',() => objectToJson(new PutRequest(auth,ba,ba,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('DeleteRequest no revision',() => objectToJson(new DeleteRequest(auth,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
       test('DeleteRequest revision',() => objectToJson(new DeleteRequest(auth,ba,ba))
-          .then(expectAsync1((string) => string)).catchError((error) => registerException(error)));
+          .then(expectAsync1((string) => _log(string))).catchError((error) => registerException(error)));
     });
     group('fromJson', () {
       GetResponse getResponse = new GetResponse([rv],ba);
