@@ -1,15 +1,15 @@
 library test;
 
 import 'package:unittest/unittest.dart';
-import 'dart:scalarlist';
+import 'dart:typeddata';
 import 'package:nigori/nigori.dart';
 
 class _ByteArrayMatcher extends BaseMatcher {
-  final ByteArray _expected;
+  final ByteData _expected;
   _ByteArrayMatcher(this._expected);
-  bool matches(ByteArray item, MatchState matchState){
-    int expectedLength = _expected.lengthInBytes();
-    if (expectedLength != item.lengthInBytes()){
+  bool matches(ByteData item, MatchState matchState){
+    int expectedLength = _expected.lengthInBytes;
+    if (expectedLength != item.lengthInBytes){
       return false;
     }
     for (int i = 0; i < expectedLength; ++i){
@@ -22,8 +22,8 @@ class _ByteArrayMatcher extends BaseMatcher {
   Description describe (Description mismatchDescription){
     return mismatchDescription.add(byteArrayToString(_expected));
   }
-  Description describeMismatch(ByteArray item, Description mismatchDescription, MatchState matchState, bool verbose) =>
+  Description describeMismatch(ByteData item, Description mismatchDescription, MatchState matchState, bool verbose) =>
       mismatchDescription.add('was ').add(byteArrayToString(item));
 }
 
-Matcher byteArrayEquals(ByteArray array) => new _ByteArrayMatcher(array);
+Matcher byteArrayEquals(ByteData array) => new _ByteArrayMatcher(array);

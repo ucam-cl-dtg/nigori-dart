@@ -2,37 +2,37 @@
 part of nigori;
 
 
-ByteArray toByteArray(List<int> ints){
+ByteData toByteArray(List<int> ints){
   Uint8List list = new Uint8List(ints.length);
   int i = 0;
   ints.forEach((byte) { list[i] = byte; ++i;});
-  return list.asByteArray();
+  return new ByteData.view(list.buffer);
 }
 
-ByteArray toBytes(String string){
+ByteData toBytes(String string){
   List<int> byteList = encodeUtf8(string);
-  ByteArray ba = new Uint8List(byteList.length).asByteArray();
+  ByteData ba = new ByteData.view(new Uint8List(byteList.length).buffer);
   int offset = 0;
-  byteList.forEach((byte) => offset = ba.setInt8(offset, byte));
+  byteList.forEach((byte) { ba.setInt8(offset, byte); offset++;});
   return ba;
 }
 
-String fromBytes(ByteArray array){
+String fromBytes(ByteData array){
   List<int> byteList = byteArrayToByteList(array);
   return decodeUtf8(byteList);
 }
 
-List<int> byteArrayToByteList(ByteArray array){
-  int length = array.lengthInBytes();
-  List<int> byteList = new List.fixedLength(length);
+List<int> byteArrayToByteList(ByteData array){
+  int length = array.lengthInBytes;
+  List<int> byteList = new List(length);
   for (int i = 0; i < length; ++i){
     byteList[i] = array.getUint8(i);
   }
   return byteList;
 }
 
-String byteArrayToString(ByteArray array){
-  int length = array.lengthInBytes();
+String byteArrayToString(ByteData array){
+  int length = array.lengthInBytes;
   String answer = "[";
   for (int i = 0; i < length; ++i){
     answer = "$answer${i>0 ? ', ':''}${array.getInt8(i)}";
@@ -40,14 +40,14 @@ String byteArrayToString(ByteArray array){
   answer = "$answer]";
   return answer;
 }
-ByteArray bigIntegerToByteArray(BigInteger integer){
+ByteData bigIntegerToByteArray(BigInteger integer){
   return toByteArray(integer.toByteArray());
 }
-BigInteger byteArrayToBigInteger(ByteArray array){
+BigInteger byteArrayToBigInteger(ByteData array){
   return new BigInteger(byteArrayToInt(array));
 }
 
-int byteArrayToInt(ByteArray array){
+int byteArrayToInt(ByteData array){
   return int.parse("0x${CryptoUtils.bytesToHex(byteArrayToByteList(array))}");
 }
 
@@ -55,15 +55,15 @@ int byteListToInt(List<int> byteList) {
   return int.parse("0x${CryptoUtils.bytesToHex(byteList)}");
 }
 
-ByteArray intToByteArray(int integer){
-  ByteArray toflip = new Uint32List(1).asByteArray();
-  ByteArray target = new Uint8List(4).asByteArray();
+ByteData intToByteArray(int integer){
+  ByteData toflip = new ByteData.view(new Uint32List(1).buffer);
+  ByteData target = new ByteData.view(new Uint8List(4).buffer);
   toflip.setInt32(0, integer);
   int offset = 0;
-  offset = target.setInt8(offset,toflip.getInt8(3));//Reverse byte order
-  offset = target.setInt8(offset,toflip.getInt8(2));
-  offset = target.setInt8(offset,toflip.getInt8(1));
-  offset = target.setInt8(offset,toflip.getInt8(0));
+  target.setInt8(offset,toflip.getInt8(3));++offset;//Reverse byte order
+  target.setInt8(offset,toflip.getInt8(2));++offset;
+  target.setInt8(offset,toflip.getInt8(1));++offset;
+  target.setInt8(offset,toflip.getInt8(0));
   return target;
 }
 
@@ -77,7 +77,7 @@ List<int> _convertTypesToListInt(dynamic item){
     itemBytes = item.toByteArray();
   else if (item is int)
     itemBytes = byteArrayToByteList(intToByteArray(item));
-  else if (item is ByteArray)
+  else if (item is ByteData)
     itemBytes = byteArrayToByteList(item);
   else
     throw new ArgumentError("Invalid type of item '${item}'");
@@ -88,20 +88,20 @@ List<int> _convertTypesToListInt(dynamic item){
  * items can be Strings or List<int>s (of bytes) or BigIntegers, types can be mixed
  * TODO(drt24) unit test
  * */
-ByteArray byteconcat(List<dynamic> items) {
+ByteData byteconcat(List<dynamic> items) {
   const intLength = 4;
-  List<List<int>> byteArrays = new List.fixedLength(items.length);
+  List<List<int>> byteArrays = new List(items.length);
   int index = 0;
   items.forEach((item){ byteArrays[index] = _convertTypesToListInt(item); ++index;});
   int length = 0;
-  byteArrays.forEach((array) => length += intLength + array.length); 
+  byteArrays.forEach((array) => length += intLength + array.length);
 
-  ByteArray ba = new Uint8List(length).asByteArray();
+  ByteData ba = new ByteData.view(new Uint8List(length).buffer);
 
   int offset = 0;
   byteArrays.forEach((array) {
     offset = _byteconcatInteger(offset,array.length,ba);
-    array.forEach((byte) => offset = ba.setInt8(offset,byte));
+    array.forEach((byte) { ba.setInt8(offset,byte);++offset;});
     });
   return ba;
 }
@@ -113,27 +113,27 @@ List<int> byteconcatList(List<dynamic> items){
 /**
  * Write an int of the length into the target array
  */
-int _byteconcatInteger(int offset, int integer, ByteArray target){
-  ByteArray length = new Uint32List(1).asByteArray();
+int _byteconcatInteger(int offset, int integer, ByteData target){
+  ByteData length = new ByteData.view(new Uint32List(1).buffer);
   length.setInt32(0, integer);
-  offset = target.setInt8(offset,length.getInt8(3));//Reverse byte order
-  offset = target.setInt8(offset,length.getInt8(2));
-  offset = target.setInt8(offset,length.getInt8(1));
-  offset = target.setInt8(offset,length.getInt8(0));
+  target.setInt8(offset,length.getInt8(3));++offset;//Reverse byte order
+  target.setInt8(offset,length.getInt8(2));++offset;
+  target.setInt8(offset,length.getInt8(1));++offset;
+  target.setInt8(offset,length.getInt8(0));++offset;
   return offset;
 }
 
-String base64Encode(ByteArray array){
+String base64Encode(ByteData array){
   return CryptoUtils.bytesToBase64(byteArrayToByteList(array));
 }
-List<String> base64EncodeList(List<ByteArray> listArray){
-  List<String> listString = new List.fixedLength(listArray.length);
+List<String> base64EncodeList(List<ByteData> listArray){
+  List<String> listString = new List(listArray.length);
   int index = 0;
   listArray.forEach((item) { listString[index] = base64Encode(item); ++index;});
   return listString;
 }
 
-ByteArray base64Decode(String encoded){
+ByteData base64Decode(String encoded){
   if (null == encoded){
     throw new ArgumentError("Null string cannot be decoded");
   }

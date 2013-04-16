@@ -8,7 +8,7 @@ class AuthenticateRequest extends JsonObject {
   String sig;
   String nonce;
   String server_name;
-  AuthenticateRequest(ByteArray public_key,ByteArray sig,ByteArray nonce, String server_name){
+  AuthenticateRequest(ByteData public_key, ByteData sig, ByteData nonce, String server_name){
     this.public_key = base64Encode(public_key);
     this['public_key'] = this.public_key;
     this.sig = base64Encode(sig);
@@ -22,7 +22,7 @@ class AuthenticateRequest extends JsonObject {
 class RegisterRequest {
   String public_key;
   String token;
-  RegisterRequest(ByteArray public_key,ByteArray token){
+  RegisterRequest(ByteData public_key, ByteData token){
     this.public_key = base64Encode(public_key);
     this.token = base64Encode(token);
   }
@@ -36,7 +36,7 @@ class UnregisterRequest extends JsonObject {
 class RevisionValue {
   String revision;
   String value;
-  RevisionValue(ByteArray revision,ByteArray value){
+  RevisionValue(ByteData revision, ByteData value){
     this.revision = base64Encode(revision);
     this.value = base64Encode(value);
   }
@@ -55,7 +55,7 @@ class GetRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
   String revision;
-  GetRequest(this.auth,ByteArray key,ByteArray revision){
+  GetRequest(this.auth, ByteData key, ByteData revision){
     this['auth'] = this.auth;
     this.key = base64Encode(key);
     this['key'] = this.key;
@@ -66,7 +66,7 @@ class GetRequest extends JsonObject {
 class GetResponse extends JsonObject {
   String key;
   List<RevisionValue> revisions;
-  GetResponse(List<RevisionValue> revisions, ByteArray key){
+  GetResponse(List<RevisionValue> revisions, ByteData key){
     this.key = base64Encode(key);
     this.revisions = revisions;
     this['key'] = this.key;
@@ -98,7 +98,7 @@ class GetIndicesRequest extends JsonObject {
 }
 class GetIndicesResponse extends JsonObject {
   List<String> indices;
-  GetIndicesResponse(List<ByteArray> indices){
+  GetIndicesResponse(List<ByteData> indices){
     this.indices = base64EncodeList(indices);
     this['indices'] = this.indices;
   }
@@ -113,7 +113,7 @@ class GetIndicesResponse extends JsonObject {
 class GetRevisionsRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
-  GetRevisionsRequest(this.auth, ByteArray key){
+  GetRevisionsRequest(this.auth, ByteData key){
     this['auth'] = this.auth;
     this.key = base64Encode(key);
     this['key'] = this.key;
@@ -122,7 +122,7 @@ class GetRevisionsRequest extends JsonObject {
 class GetRevisionsResponse extends JsonObject {
   List<String> revisions;
   String key;
-  GetRevisionsResponse(List<ByteArray> revisions, ByteArray key) {
+  GetRevisionsResponse(List<ByteData> revisions, ByteData key) {
     this.revisions = base64EncodeList(revisions);
     this.key = base64Encode(key);
     this['revisions'] = this.revisions;
@@ -142,7 +142,7 @@ class PutRequest extends JsonObject {
   String key;
   String revision;
   String value;
-  PutRequest(this.auth,ByteArray key,ByteArray revision,ByteArray value){
+  PutRequest(this.auth, ByteData key, ByteData revision, ByteData value){
     this['auth'] = this.auth;
     this.key = base64Encode(key);
     this['key'] = this.key;
@@ -156,7 +156,7 @@ class DeleteRequest extends JsonObject {
   final AuthenticateRequest auth;
   String key;
   //String revision;
-  DeleteRequest(this.auth,ByteArray key,[ByteArray revision]){
+  DeleteRequest(this.auth, ByteData key,[ByteData revision]){
     this.key = base64Encode(key);
     this['auth'] = this.auth;
     this['key'] = this.key;

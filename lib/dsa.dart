@@ -1,6 +1,6 @@
 library dsa;
 
-import 'dart:scalarlist';
+import 'dart:typeddata';
 import 'dart:math';
 import 'dart:crypto';
 import 'package:nigori/nigori.dart';
@@ -29,7 +29,7 @@ class Dsa {
     _p = _parameters.p;
   }
 
-  DsaSignature sign(ByteArray message, BigInteger privateKey){
+  DsaSignature sign(ByteData message, BigInteger privateKey){
     BigInteger k = _randomBitsLessThan(_parameters.n,_q);
     BigInteger km1 = k.modInverse(_q);
     BigInteger r = _g.modPow(k, _p).mod(_q);
@@ -38,7 +38,7 @@ class Dsa {
     return new DsaSignature(r,s);
   }
 
-  void verify(ByteArray message, DsaSignature signature, BigInteger publicKey){
+  void verify(ByteData message, DsaSignature signature, BigInteger publicKey){
     if (!(BigInteger.ZERO < signature.r && signature.r < _q)){
       throw new InvalidSignatureException("Invalid r: !0 < r< q: ${signature.r}");
     }
@@ -55,7 +55,7 @@ class Dsa {
     }
   }
 
-  static BigInteger _hash(ByteArray message){
+  static BigInteger _hash(ByteData message){
     SHA256 hashFunction = new SHA256();
     hashFunction.add(byteArrayToByteList(message));
     List<int> hash = hashFunction.close();

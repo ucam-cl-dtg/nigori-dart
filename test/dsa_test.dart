@@ -3,7 +3,7 @@ import 'package:nigori/nigori.dart';
 import 'package:nigori/dsa.dart';
 import 'package:nigori/test.dart';
 import 'package:bignum/bignum.dart';
-import 'dart:scalarlist';
+import 'dart:typeddata';
 
 void dsa_test_vectors(Dsa dsa) {
   String message0 ="message";
@@ -52,7 +52,7 @@ void main() {
   test('dsa sign runs', () => dsa.sign(toBytes("message"),new BigInteger("fff")));
   test('dsa generateInsecureKeypair runs', () => dsa.generateInsecureKeyPair());
   DsaKeyPair keyPair = dsa.generateInsecureKeyPair();
-  ByteArray message = toBytes("message");
+  ByteData message = toBytes("message");
   DsaSignature signature = dsa.sign(message, keyPair.privateKey);
 
   test('dsa sign with key verifies', () => dsa.verify(message, signature, keyPair.publicKey));

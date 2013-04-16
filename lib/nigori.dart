@@ -2,7 +2,7 @@ library nigori;
 
 import 'dart:async';
 import 'dart:utf';
-import 'dart:scalarlist';
+import 'dart:typeddata';
 import 'dart:crypto';
 import 'dart:json';
 import 'dart:math';
@@ -28,7 +28,7 @@ class NigoriConstants {
   static final int Bkmac = 16;
   static final int Bkiv = 16;
   static final int Bkmaster = 16;
-  static final ByteArray Usersalt = toByteArray([117,115,101,114,32,115,97,108,116]);
+  static final ByteData Usersalt = toByteArray([117,115,101,114,32,115,97,108,116]);
 }
 
 class NigoriNonce {
@@ -44,8 +44,8 @@ class NigoriNonce {
     _timestamp = new DateTime.now().millisecondsSinceEpoch~/1000;
     _random = _randomGen.nextInt(((1<<32) - 1));
   }
-  ByteArray toByteArray() {
-    ByteArray ba = new Uint8List(8).asByteArray();
+  ByteData toByteArray() {
+    ByteData ba = new ByteData.view(new Uint8List(8).buffer);
     int offset = 0;
     offset = _byteconcatInteger(offset,_random,ba);
     offset = _byteconcatInteger(offset,_timestamp,ba);
